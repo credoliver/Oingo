@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Profile</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    var email = $.query.get("email");
+    var uid = $.query.get("uid");
+    console.log(uid);
+</script>
+
+<div class="container">
+		<div class="jumbotron">
+            <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Profile</div>
+          </div>
+          <!-- List group -->
+          <ul class="list-group" id="group">
+          </ul>
+        </div>
+</div>
+
+<script type="text/javascript">
+    var myself = 0;
+    $.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/getid",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+            if(result.uid==uid){
+                myself=1;
+            }
+        }
+        });
+    $("username").text("asdasd");
+    $.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/users/"+uid,
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+            h = ''
+            console.log(result);
+            h = h+'<li class="list-group-item">Username:'+result.uprofile.uname+'</li>'
+            h = h+'<li class="list-group-item">Email:'+result.uprofile.uemail+'</li>'
+            h = h+'<li class="list-group-item">Latitude:'+result.uprofile.ulati+'</li>'
+            h = h+'<li class="list-group-item">Longitude:'+result.uprofile.ulongi+'</li>'
+            if (myself==1) {
+                h = h+'<input class="form-control" type="text" id="status" value ="'+result.uprofile.ustate+'" >'
+                h = h+'<a class="btn btn-primary btn-sm" href="javascript:updatestatus()" role="button">Update Status</a>'
+            }
+            else{
+                h = h+'<li class="list-group-item">Status:'+result.uprofile.ustate+'</li>'
+            }
+            $('#group').html(h);
+        }
+        });
+function updatestatus(){
+    var state = $("#status").val();
+    $.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/updateUserState",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email , ustate :state }),
+        success: function(result) {
+            alert("Status Updated!");
+            location.reload();
+        }
+        });
+}
+
+</script>
+</body>
+</html>

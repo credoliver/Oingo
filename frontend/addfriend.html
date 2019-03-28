@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add new friends</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+	var email = $.query.get("email");
+</script>
+<div class="container">
+		<div class="jumbotron">
+		  <h1>Add a new friend via email</h1>
+		  <div class="row">
+		  <div class="col-lg-6">
+		    <div class="input-group">
+		      <input type="text" class="form-control" placeholder="Enter Email Address" id="useremail">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button" onclick="javascript:request()">Request</button>
+		      </span>
+		    </div><!-- /input-group -->
+		  </div><!-- /.col-lg-6 -->
+		</div><!-- /.row -->
+		  
+		</div>
+	</div>
+
+<script type="text/javascript">
+function request() {
+	var sendto = $("#useremail").val();
+
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/request",
+        dataType: "json",
+        data: JSON.stringify({ uemail: email, sendTo : sendto}),
+        success: function(result) {
+        	alert("Friend Request Sent!")
+        },
+        error:function(e){
+        	alert(e);
+        }
+    });
+}
+</script>
+</body>
+</html>

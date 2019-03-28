@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>New Post</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script  src="js/jquery.params.js"></script>
+	<script  src="js/main.js"></script>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+	<script type="text/javascript">
+		var email = $.query.get("email");
+	</script>
+	<div class="container">
+		<div class="jumbotron">
+		  <h1>Post a new note</h1>
+		  		<div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Text</span>
+                        <input class="form-control" type="text" id="text">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Tags</span>
+                        <input class="form-control" type="text" id="tags">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Latitude</span>
+                        <input class="form-control" type="text" id="lat">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Longitude</span>
+                        <input class="form-control" type="text" id="log">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Radius</span>
+                        <input class="form-control" type="text" id="radius">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Visibility</span>
+                        <input class="form-control" type="text" id="vis">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Commentable</span>
+                        <input class="form-control" type="text" id="commentable">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Start Time</span>
+                        <input class="form-control" type="text" id="stime">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">End Time</span>
+                        <input class="form-control" type="text" id="etime">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Repetition</span>
+                        <input class="form-control" type="text" id="rep">
+                    </div>
+                </div>
+		  <p><a class="btn btn-primary btn-lg" href="javascript:postnote()" role="button">Post</a></p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		getPosition().then(result => {
+        // 返回结果示例：
+        // {latitude: 30.318030999999998, longitude: 120.05561639999999}
+        let queryData = {
+          longtitude: String(result.longitude),
+          latitude: String(result.latitude),
+        }
+        // 以下放置获取坐标后你要执行的代码:
+        // ...
+      $('#lat').attr("value",queryData["latitude"])
+      $('#log').attr("value",queryData["longtitude"])
+      }).catch(err => {
+        console.log(err)
+      })
+		Date.prototype.Format = function (fmt) { // author: meizz
+		    var o = {
+		        "M+": this.getMonth() + 1, // 月份
+		        "d+": this.getDate(), // 日
+		        "h+": this.getHours(), // 小时
+		        "m+": this.getMinutes(), // 分
+		        "s+": this.getSeconds(), // 秒
+		        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+		        "S": this.getMilliseconds() // 毫秒
+		    };
+		    if (/(y+)/.test(fmt))
+		        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		            return fmt;
+		}
+
+
+      function postnote() {
+      	var time = new Date().Format("yyyy-MM-dd hh:mm:ss");
+      	var text = $("#text").val();
+      	var tags = $("#tags").val();
+        var tagarr = new Array();
+        tagarr[0]=tags;
+      	var latitude = $("#lat").val();
+    	var longitude = $("#log").val();
+    	var radius = $("#radius").val();
+    	var vis = $("#vis").val();
+    	var comment = $("#commentable").val();
+    	var stime = $("#stime").val();
+    	var etime = $("#etime").val();
+    	var rep = $("#rep").val();
+    	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/note",
+        dataType: "json",
+        data: JSON.stringify({ uemail: email, ntext : text, tag : tagarr, ntime : time ,nlongi : longitude,nlati : latitude , nradius : radius , visibility : vis , commentable : comment,
+        						starttime : stime , endtime : etime , repetition : rep }),
+        success: function(result) {
+        	alert("New Note Post Success!")
+          // window.location.href="main.html?email="+email; 
+        },
+        error:function(e){
+        	alert(e);
+        }
+    });
+      }
+	</script>
+</body>
+</html>

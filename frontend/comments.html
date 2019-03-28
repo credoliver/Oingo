@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comments</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL43jKcwpQH6O_yNTff1HiWNK7cee4x0g&callback=initMap">
+    </script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="jumbotron">
+    	<div class="panel panel-default">
+  <!-- Default panel contents -->
+  		<div class="panel-heading">Comments</div>
+
+  <!-- Table -->
+		  <table class="table">
+		    <thead>
+		        <tr>
+		            <th>User</th>
+		            <th>Text</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tbody">
+		        
+		    </tbody>
+		  </table>
+    	</div>
+    </div><!-- jumbotron -->
+</div><!-- container -->
+<script type="text/javascript">
+	var nid = $.query.get("nid");
+    var email = $.query.get("email")
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/notes/"+nid+"/comments",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+            console.log(result);
+        	h = '';
+        	for (let i=0,len = result.commentsList.length;i<len;i++){
+                console.log(result.commentsList[i]);
+        		h = h+'<tr>';
+			    h = h+'<td>'+result.commentsList[i].createdBy+'</td>';
+			    h = h+'<td>'+result.commentsList[i].ctext+'</td>';
+			    h = h+'</tr>';
+        	}
+            $('#tbody').html(h);
+        }
+    	});
+</script>
+
+</body>
+</html>

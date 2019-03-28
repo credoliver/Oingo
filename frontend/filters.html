@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Filters</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+<div class="container">
+		<div class="jumbotron">
+		  <h1>New filters</h1>
+		  		<div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">From</span>
+                        <input class="form-control" type="text" id="from">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Tag</span>
+                        <input class="form-control" type="text" id="tag">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Latitude</span>
+                        <input class="form-control" type="text" id="lat">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Longitude</span>
+                        <input class="form-control" type="text" id="log">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Radius</span>
+                        <input class="form-control" type="text" id="radius">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Status</span>
+                        <input class="form-control" type="text" id="status">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Start Time</span>
+                        <input class="form-control" type="text" id="stime">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">End Time</span>
+                        <input class="form-control" type="text" id="etime">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Repetition</span>
+                        <input class="form-control" type="text" id="rep">
+                    </div>
+                </div>
+		  <p><a class="btn btn-primary btn-lg" href="javascript:addfilter()" role="button">Apply</a></p>
+		</div>
+	</div>
+<div class="container">
+    <div class="jumbotron">
+    	<div class="panel panel-default">
+  <!-- Default panel contents -->
+  		<div class="panel-heading">My filters</div>
+
+  <!-- Table -->
+		  <table class="table">
+		    <thead>
+		        <tr>
+		            <th>Filter ID</th>
+		            <th>From</th>
+		            <th>Latitude</th>
+		            <th>Longitude</th>
+		            <th>Radius</th>
+		            <th>State</th>
+		            <th>Tag</th>
+		            <th>Time</th>
+		            <th>Filter uid</th>
+                    <th>Action</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tbody">
+		        <tr>
+		        	<!-- <td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td><a class="btn btn-primary btn-sm" href="javascript:accept(result.requestsList[i].uemail)" role="button">Accept</a></td> -->
+
+		        </tr>
+		    </tbody>
+		  </table>
+    	</div>
+    </div><!-- jumbotron -->
+</div><!-- container -->
+<script type="text/javascript">
+	var email = $.query.get("email");
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/filters",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+        	console.log(result);
+        	h = '';
+        	for (let i=0,len = result.filtersList.length;i<len;i++){
+        		h = h+'<tr>';
+			    h = h+'<td>'+result.filtersList[i].fid+'</td>';
+			    h = h+'<td>'+result.filtersList[i].ffrom+'</td>';
+			    h = h+'<td>'+result.filtersList[i].flati+'</td>';
+			    h = h+'<td>'+result.filtersList[i].flongi+'</td>';
+			    h = h+'<td>'+result.filtersList[i].fradius+'</td>';
+			    h = h+'<td>'+result.filtersList[i].fstate+'</td>';
+			    h = h+'<td>'+result.filtersList[i].ftag+'</td>';
+			    h = h+'<td>'+result.filtersList[i].ftime+'</td>';
+			    h = h+'<td>'+result.filtersList[i].fuid+'</td>';
+			    console.log(result.filtersList[i].isvalid);
+			    if (result.filtersList[i].isvalid==1){
+			    	h = h+'<td><a class="btn btn-danger btn-sm" href="javascript:btn_action('+result.filtersList[i].fid+')"  role="button" id= "btn'+result.filtersList[i].fid+'">Disable</a></td>';
+			    }
+			    else{
+			    	h = h+'<td><a class="btn btn-success btn-sm" href="javascript:btn_action('+result.filtersList[i].fid+')" role="button" id= "btn'+result.filtersList[i].fid+'">Activate</a></td>';
+			    }
+			    h = h+'</tr>';
+        	}
+            $('#tbody').html(h);
+        }
+    	});
+</script>
+<script type="text/javascript">
+	Date.prototype.Format = function (fmt) { // author: meizz
+		    var o = {
+		        "M+": this.getMonth() + 1, // 月份
+		        "d+": this.getDate(), // 日
+		        "h+": this.getHours(), // 小时
+		        "m+": this.getMinutes(), // 分
+		        "s+": this.getSeconds(), // 秒
+		        "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+		        "S": this.getMilliseconds() // 毫秒
+		    };
+		    if (/(y+)/.test(fmt))
+		        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		            return fmt;
+		}
+
+	function addfilter() {
+      	var time = new Date().Format("yyyy-MM-dd hh:mm:ss");
+      	var from = $("#from").val();
+      	var tag = $("#tag").val();
+      	var latitude = $("#lat").val();
+    	var longitude = $("#log").val();
+    	var radius = $("#radius").val();
+    	var stime = $("#stime").val();
+    	var etime = $("#etime").val();
+    	var rep = $("#rep").val();
+    	var status = $("#status").val();
+    	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/filter",
+        dataType: "text",
+        data: JSON.stringify({ uemail: email, ffrom : from, ftag : tag, ftime : time ,flongi : longitude,
+        						flati : latitude , fradius : radius , fstate : status,
+        						starttime : stime , endtime : etime , repetition : rep }),
+        success: function(result) {
+        	alert("New Filter Set Success!")
+        	location.reload();
+        },
+        error:function(e){
+        	alert(e);
+        }
+        });
+    }
+    function btn_action(btnid){
+    	var id = 'btn'+btnid
+    	if ($('#'+id+'').text()=='Activate') {
+    		$('#'+id+'').attr('class','btn btn-danger btn-sm');
+    		$('#'+id+'').text('Disable');
+    		var validation = 1
+    	}
+    	else{
+    		$('#'+id+'').attr('class','btn btn-success btn-sm');
+    		$('#'+id+'').text('Activate');
+    		var validation = 0
+    	}
+    	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/filters/"+btnid,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email, isvalid: validation }),
+        success: function(result) {
+        	alert("Filter status changed")
+          // window.location.href="main.html?email="+email; 
+        },
+        error:function(e){
+        	alert(e);
+        }
+        });
+    	
+    }
+</script>
+
+</body>
+</html>

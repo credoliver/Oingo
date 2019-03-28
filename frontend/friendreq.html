@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Friend Requests</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+    	<div class="panel panel-default">
+  <!-- Default panel contents -->
+  		<div class="panel-heading">Friend Requests</div>
+
+  <!-- Table -->
+		  <table class="table">
+		    <thead>
+		        <tr>
+		            <th>Email</th>
+		            <th>Id</th>
+		            <th>Latitude</th>
+		            <th>Longitude</th>
+		            <th>Name</th>
+		            <th>State</th>
+		            <th>Accept</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tbody">
+		        <tr>
+		        	<!-- <td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td>aaa</td>
+		        	<td><a class="btn btn-primary btn-sm" href="javascript:accept(result.requestsList[i].uemail)" role="button">Accept</a></td> -->
+
+		        </tr>
+		    </tbody>
+		  </table>
+    	</div>
+    </div><!-- jumbotron -->
+</div><!-- container -->
+<script type="text/javascript">
+	var email = $.query.get("email");
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/requests",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+        	console.log(result);
+        	h = '';
+        	for (let i=0,len = result.requestsList.length;i<len;i++){
+        		h = h+'<tr>';
+			    h = h+'<td>'+result.requestsList[i].uemail+'</td>';
+			    h = h+'<td>'+result.requestsList[i].uid+'</td>';
+			    h = h+'<td>'+result.requestsList[i].ulati+'</td>';
+			    h = h+'<td>'+result.requestsList[i].ulongi+'</td>';
+			    h = h+'<td>'+result.requestsList[i].uname+'</td>';
+			    h = h+'<td>'+result.requestsList[i].ustate+'</td>';
+			    h = h+'<td><a class="btn btn-primary btn-sm" href="javascript:accept('+result.requestsList[i].uid+')" role="button">Accept</a></td>';
+			    h = h+'</tr>';
+        	}
+        	$('#tbody').html(h);
+        }
+    	});
+	
+
+function accept(uid){
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/requests/"+uid,
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+        	location.reload();
+        }
+    	});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Oingo</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script  src="js/jquery.params.js"></script>
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL43jKcwpQH6O_yNTff1HiWNK7cee4x0g&callback=initMap">
+   	</script>
+	<script  src="js/main.js"></script>
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 60%;
+        width: 60%;
+        margin: 0 auto;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+	.container{
+	    text-align: center;
+	    float: none;
+	}
+      /*.navbar {
+      	background-color: rgba(19, 35, 47, 0.9); 
+      }*/
+    </style>
+</head>
+<body>
+<input type="email" required autocomplete="off" id="uid" style="display: none;" />
+<script type="text/javascript">
+	var email = $.query.get("email");
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/main",
+        cache:false, 
+        async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+        	console.log(result);
+        	$("#uid").val(result.uid);
+        	if (result.status==0){
+        		window.location.href="index.html";
+        	}
+        }
+    });
+</script>
+
+<div class="container">
+	<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="main.html">Oingo</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+		<li><a href="post.html" id="post">Post</a></li>
+		<li><a href="mynotes.html" id="mynotes">My Notes</a></li>
+		<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Friends<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="friendlist.html" id="href1">My Friends</a></li>
+            <li><a href="friendreq.html" id="href2">Requests</a></li>
+            <li><a href="addfriend.html" id="href3">Add A Friend</a></li>
+          </ul>
+        </li>
+		<li><a href="filters.html" id="href4">Filters</a></li>
+		<!--
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li> -->
+      </ul>
+      <!-- <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form> -->
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="profile.html" id="usrn">Username</a></li>
+        <li><a href="javascript:logout()">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav><!-- navbar-->
+
+</div>
+<div id="map"></div>
+	<script>
+	getlocation();
+    initMap();
+    </script>
+<form class="" role="form">
+        <div class="container">
+            <div class="row" style="padding: 20px 0">
+                <h3>Your Current Location</h3>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Latitude</span>
+                        <input class="form-control" type="text" id="lat">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Longitude</span>
+                        <input class="form-control" type="text" id="log">
+                    </div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Current Time</span>
+                        <input class="form-control" type="text" id="ctime">
+                    </div>
+                </div>
+                <button class="btn btn-default" type="button" id="re" onclick="refreshlocation()">Refresh</button>
+            </div>
+        </div>
+    </form>
+<!-- <div style="display: flex;justify-content: center;">
+	<fieldset>
+	<h3>Your Current Location</h3>
+	<input type="text" id="lat"><input type="text" id="log">
+	<button class="btn btn-default" type="button" id="re" onclick="refreshlocation()">Go!</button>
+	</fieldset>
+</div> -->
+<script type="text/javascript">
+	var time = new Date().Format("yyyy-MM-dd hh:mm:ss");
+	var myuid = $("#uid").val();
+	console.log(myuid);
+	$("#usrn").text(email);
+	$("#usrn").attr('href','profile.html?email='+email+'&uid='+myuid);
+	$("#post").attr('href','post.html?email='+email);
+	$("#mynotes").attr('href','mynotes.html?email='+email)
+	$("#href1").attr('href','friendlist.html?email='+email)
+	$("#href2").attr('href','friendreq.html?email='+email)
+	$("#href3").attr('href','addfriend.html?email='+email)
+	$("#href4").attr('href','filters.html?email='+email)
+	$("#ctime").attr("value",time)
+</script>
+</body>
+</html>

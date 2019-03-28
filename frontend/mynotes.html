@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Notes</title>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script  src="js/jquery.params.js"></script>
+    <script  src="js/main.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        var email = $.query.get("email");
+    </script>
+<div class="container">
+    <div class="jumbotron">
+    	<div class="panel panel-default">
+  <!-- Default panel contents -->
+  		<div class="panel-heading">My Notes</div>
+
+  <!-- Table -->
+		  <table class="table">
+		    <thead>
+		        <tr>
+		            <th>Note ID</th>
+		            <th>Text</th>
+		            <th>Tag</th>
+		            <th>Commentable</th>
+                    <th>Visibility</th>
+                    <th>Action</th>
+		        </tr>
+		    </thead>
+		    <tbody id="tbody">
+		        <tr>
+		        </tr>
+		    </tbody>
+		  </table>
+    	</div>
+    </div><!-- jumbotron -->
+</div><!-- container -->
+<script type="text/javascript">
+    var email = $.query.get("email")
+	$.ajax({
+        type: "post",
+        url: "http://192.168.1.185:8080/notes",
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+            console.log(result);
+        	h = '';
+        	for (let i=0,len = result.notesList.length;i<len;i++){
+                console.log(result.notesList[i]);
+                h = h+'<tr>';
+                h = h+'<td>'+result.notesList[i].nid+'</td>';
+                h = h+'<td>'+result.notesList[i].ntext+'</td>';             
+                h = h+'<td>'+result.notesList[i].ntag+'</td>';
+                h = h+'<td>'+result.notesList[i].commentable+'</td>';
+                h = h+'<td>'+result.notesList[i].visibility+'</td>';
+                h = h+'<td><a class="btn btn-danger btn-sm" href="javascript:deletenote('+result.notesList[i].nid+')" role="button">Delete</a></td>';
+                h = h+'</tr>';
+            }
+            $('#tbody').html(h);
+        }
+    	});
+function deletenote(nid){
+    $.ajax({
+        type: "delete",
+        url: "http://192.168.1.185:8080/notes/"+nid,
+        cache:false, 
+        // async:false,
+        dataType: "json",
+        data: JSON.stringify({ uemail: email}),
+        success: function(result) {
+            alert("Note Deleted.");
+            location.reload();
+        }
+        });
+}
+</script>
+</body>
+</html>
